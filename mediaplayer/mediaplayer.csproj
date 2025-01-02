@@ -1,0 +1,135 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>mediaplayer</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &gt;= 8">win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <PublishProfile>win-$(Platform).pubxml</PublishProfile>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <UserSecretsId>4161efa2-4e6e-49aa-8623-4cff0afbb1fa</UserSecretsId>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="Assets\bin.png" />
+    <Content Remove="Assets\close.png" />
+    <Content Remove="Assets\expand.png" />
+    <Content Remove="Assets\high-volume.png" />
+    <Content Remove="Assets\home.png" />
+    <Content Remove="Assets\home_empty.png" />
+    <Content Remove="Assets\left-arrow.png" />
+    <Content Remove="Assets\maximize.png" />
+    <Content Remove="Assets\mediaplayer.png" />
+    <Content Remove="Assets\multimedia-option.png" />
+    <Content Remove="Assets\music-note.png" />
+    <Content Remove="Assets\music.png" />
+    <Content Remove="Assets\musicnote.png" />
+    <Content Remove="Assets\option.png" />
+    <Content Remove="Assets\pause.png" />
+    <Content Remove="Assets\play-button.png" />
+    <Content Remove="Assets\play-buttton.png" />
+    <Content Remove="Assets\play.png" />
+    <Content Remove="Assets\playlist.png" />
+    <Content Remove="Assets\plus.png" />
+    <Content Remove="Assets\repeat.png" />
+    <Content Remove="Assets\search-interface-symbol.png" />
+    <Content Remove="Assets\setting.png" />
+    <Content Remove="Assets\shuffle.png" />
+    <Content Remove="Assets\video.png" />
+    <Content Remove="Assets\videolibrary.png" />
+    <Content Remove="Assets\volume-up-interface-symbol.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="CommunityToolkit.WinUI.Media" Version="8.1.240916" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Markdown" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
+    <PackageReference Include="MongoDB.Driver" Version="3.1.0" />
+    <PackageReference Include="MySql.Data" Version="9.1.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+    <PackageReference Include="Uno.WinUI.MediaPlayer.WebAssembly" Version="5.5.94" />
+    <PackageReference Include="WinUIEx" Version="2.5.0" />
+    <PackageReference Include="XPlat.Storage.Pickers" Version="1.8.1" />
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <!--
+    Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
+    Tools extension to be activated for this project even if the Windows App SDK Nuget
+    package has not yet been restored.
+  -->
+  <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <ProjectCapability Include="Msix" />
+  </ItemGroup>
+
+  <!--
+    Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
+    Explorer "Package and Publish" context menu entry to be enabled for this project even if
+    the Windows App SDK Nuget package has not yet been restored.
+  -->
+  <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+  </PropertyGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Lapto\source\repos\mediaplayer\mediaplayer\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Home.xaml" />
+    <None Remove="MusicLibrary.xaml" />
+    <None Remove="PlayList.xaml" />
+    <None Remove="PlaylistElement.xaml" />
+    <None Remove="PlayQueue.xaml" />
+    <None Remove="VideoLibrary.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Lapto\source\repos\mediaplayer\mediaplayer\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PlaylistElement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PlayList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PlayQueue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="VideoLibrary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MusicLibrary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Home.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

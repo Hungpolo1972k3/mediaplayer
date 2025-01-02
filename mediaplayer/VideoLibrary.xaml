@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="MediaPlayerWinUI.VideoLibrary"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MediaPlayerWinUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#8a8a8a"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
+    <Grid Background="White">
+        <Grid x:Name="VideoLibrary_Empty" Visibility="Collapsed">
+            <TextBlock Text="Video" FontSize="40" FontWeight="Bold" HorizontalTextAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image Source="C:\Users\Lapto\source\repos\mediaplayer\mediaplayer\Assets\videolibrary.png" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,20,0"/>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="We couldn't find any find any videos" FontSize="30" HorizontalTextAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Text="Your music library doesn't contain any video content" VerticalAlignment="Center"  HorizontalTextAlignment="Left" Margin="0,10"/>
+                    <StackPanel Padding="10,5" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                        <FontIcon Glyph="&#xE8F4;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
+                        <TextBlock Text="Add folder" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="VideoLibrary_Header" Visibility="Visible">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Video" FontSize="40" FontWeight="Bold" HorizontalTextAlignment="Left" VerticalAlignment="Top" Margin="40,25,0,0"/>
+                <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" CharacterSpacing="15">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBoxItem Tapped="AllVideosChoose">
+                        <TextBlock Text="All videos" FontSize="20"/>
+                    </ListBoxItem>
+                    <ListBoxItem Tapped="VideoFoldersChoose">
+                        <TextBlock Text="Video folders" FontSize="20"/>
+                    </ListBoxItem>
+                </ListBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,30,0">
+                <Button HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" BorderBrush="LightGray" Background="White" CornerRadius="5" >
+                    <Button.Content>
+                        <StackPanel Padding="10,5" Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE8F4;" Margin="0,0,10,0"/>
+                            <TextBlock Text="Add folder" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="VideoLibrary_PlayAll_btn">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,100,0,0">
+                <Button Background="#D9411E" Foreground="White" Padding="10,5" CornerRadius="4" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <FontIcon Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="18" Margin="0,0,8,0"/>
+                        <TextBlock Text="Play all" FontSize="16" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <DropDownButton Content="Sort by: A - Z" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,30,0">
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuFlyoutItem Text="A - Z" />
+                        <MenuFlyoutItem Text="Date modified" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+        </Grid>
+        <Grid x:Name="VideoLibrary_AllVideos" Visibility="Visible">
+            <Border x:Name="CheckBoxBar_AllVideos" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" Margin="30,100,0,0" Height="45" Background="White" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+                        <CheckBox x:Name="CheckBoxAll_AllVideos" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="CheckedCount_AllVideos" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock Text=" videos selected *" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Button BorderBrush="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <Button.Content>
+                                <TextBlock Text="Clear" Foreground="Red" />
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <Button Background="#d03f0a" Padding="10,5" BorderThickness="0" CornerRadius="5" Margin="20,0,15,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE102;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE893;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play next" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE8FE;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Edit with Clipchamp" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE109;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Add to" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE946;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Properties" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+            <GridView x:Name="MyGridView_AllVideos" Margin="20,220,0,0">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel  PointerEntered="AllVideos_elements_PointerEntered" PointerExited="AllVideos_elements_PointerExited">
+                            <Grid Margin="20,10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!-- Hình vuông bọc Ellipse -->
+                                <Rectangle Width="250" Height="130" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10" >
+                                    <Rectangle.RenderTransform>
+                                        <RotateTransform Angle="0" />
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                                <CheckBox x:Name="CheckBox_AllVideos_VideoLibrary"   
+                                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                      Checked="CheckBox_AllVideos_Checked" 
+                                      Unchecked="CheckBox_AllVideos_Unchecked" 
+                                      Visibility="Collapsed"
+                                      HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+
+                                <Button x:Name="AllVideos_Play_btn" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
+                                    <Button.Content>
+                                        <FontIcon Glyph="&#xE102;" FontSize="15"/>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Name="AllVideos_Info_btn" Visibility="Collapsed"  Width="45" Height="45" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Style="{StaticResource RoundButtonStyle}">
+                                    <Button.Content>
+                                        <FontIcon Glyph="&#xE10C;" FontSize="15"/>
+                                    </Button.Content>
+                                </Button>
+                                <FontIcon Glyph="&#xE8B2;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
+                            </Grid>
+                            <StackPanel VerticalAlignment="Bottom" Margin="20,0,0,5">
+                                <TextBlock Text="{Binding Title_Video_name}" 
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Bottom" 
+                                    TextAlignment="Left" 
+                                    FontSize="16" 
+                                    Foreground="Black" />   
+                                <TextBlock Text="{Binding Video_Runtime}" 
+                                     TextWrapping="Wrap" 
+                                     TextAlignment="Left" 
+                                     FontSize="12" 
+                                     Foreground="Black"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </Grid>
+        <Grid x:Name="VideoLibrary_VideoFolders" Visibility="Collapsed">
+            <Border x:Name="CheckBoxBar_VideoFolders" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" Margin="30,100,0,0" Height="45" Background="White" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+                        <CheckBox x:Name="CheckBoxAll_VideoFolders" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="CheckedCount_VideoFolders" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock Text=" videos selected *" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Button BorderBrush="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <Button.Content>
+                                <TextBlock Text="Clear" Foreground="Red" />
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <Button Background="#d03f0a" Padding="10,5" BorderThickness="0" CornerRadius="5" Margin="20,0,15,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE102;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE893;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play next" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE8FE;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Edit with Clipchamp" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE109;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Add to" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="20,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE946;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Properties" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+            <GridView Width="1100" x:Name="MyGridView_VideoFolders" Margin="40,180,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="6"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel HorizontalAlignment="Left" >
+                            <!-- Thư mục -->
+                            <StackPanel Orientation="Horizontal"  Margin="0,10,0,10" Width="1300">
+                                <FontIcon Glyph="&#xE8F4;" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" />
+                                <TextBlock Text="{Binding Title_VideoFolder_Name}" 
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" 
+                                       TextAlignment="Center" 
+                                       FontSize="20" 
+                                       Margin="5,0"
+                                       Foreground="Black" />
+                                <TextBlock Text="{Binding Title_VideoFolder_Url}" 
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" 
+                                       TextAlignment="Right" 
+                                       FontSize="16" 
+                                       Margin="5,0"    
+                                       Foreground="Black" />
+                            </StackPanel>
+
+                            <GridView x:Name="MyGridView_VideosInFolder" ItemsSource="{Binding Videos}" Margin="0, 10, 0, 0">
+                                <GridView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2"/>
+                                    </ItemsPanelTemplate>
+                                </GridView.ItemsPanel>
+
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel PointerEntered="VideoFolders_elements_PointerEntered" PointerExited="VideoFolders_elements_PointerExited">
+                                            <Grid Margin="20,5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <!-- Hình vuông bọc Ellipse -->
+                                                <Rectangle Width="250" Height="130" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10" >
+                                                    <Rectangle.RenderTransform>
+                                                        <RotateTransform Angle="0" />
+                                                    </Rectangle.RenderTransform>
+                                                </Rectangle>
+                                                <CheckBox x:Name="CheckBox_VideoFolders_VideoLibrary"   
+                                                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      Checked="CheckBox_VideoFolders_Checked" 
+                                                      Unchecked="CheckBox_VideoFolders_Unchecked" 
+                                                      Visibility="Collapsed"
+                                                      HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+
+                                                <Button x:Name="VideoFolders_Play_btn" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
+                                                    <Button.Content>
+                                                        <FontIcon Glyph="&#xE102;" FontSize="15"/>
+                                                    </Button.Content>
+                                                </Button>
+                                                <Button x:Name="VideoFolders_Info_btn" Visibility="Collapsed"  Width="45" Height="45" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Style="{StaticResource RoundButtonStyle}">
+                                                    <Button.Content>
+                                                        <FontIcon Glyph="&#xE10C;" FontSize="15"/>
+                                                    </Button.Content>
+                                                </Button>
+                                                <FontIcon Glyph="&#xE8B2;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
+                                            </Grid>
+                                            <StackPanel VerticalAlignment="Bottom" Margin="20,0,0,5">
+                                                <TextBlock Text="{Binding Title_Video_name}" 
+                                                        TextWrapping="Wrap"
+                                                        VerticalAlignment="Bottom" 
+                                                        TextAlignment="Left" 
+                                                        FontSize="16" 
+                                                        Foreground="Black" />
+                                                <TextBlock Text="{Binding Video_Runtime}" 
+                                                         TextWrapping="Wrap" 
+                                                         TextAlignment="Left" 
+                                                         FontSize="12" 
+                                                         Foreground="Black"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </Grid>
+    </Grid>
+</Page>
