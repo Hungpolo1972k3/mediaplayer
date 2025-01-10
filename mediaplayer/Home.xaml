@@ -21,19 +21,29 @@
 
     <Grid Background="White">
         <TextBlock Text="Home" FontSize="40" HorizontalAlignment="Left" Margin="30,10,0,0" FontWeight="Bold" />
-        <DropDownButton Content="Open file(s)" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,40,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="10,5">
+        <DropDownButton x:Name="AddFiles_Btn" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,40,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="10,5">
+            <DropDownButton.Content>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="OpenFile"  Width="20" Height="20" VerticalAlignment="Center" Margin="5,0" />
+                    <TextBlock Text="Open file(s)" FontSize="16" VerticalAlignment="Center" Margin="5,0"/>
+                </StackPanel>
+            </DropDownButton.Content>
             <DropDownButton.Flyout>
                 <MenuFlyout Placement="Bottom">
                     <MenuFlyoutItem>
                         <MenuFlyoutItem.Template>
                             <ControlTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="10,0">
-                                    <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                        <TextBlock Text="Open file" FontSize="16" FontWeight="SemiBold" />
-                                        <TextBlock Text="Browse for files to play" FontSize="12" Foreground="Gray" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <Button BorderThickness="0" Click="OpenFileButton_Click">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                                            <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                <TextBlock Text="Open file" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="Browse for files to play" FontSize="12" Foreground="Gray" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                             </ControlTemplate>
                         </MenuFlyoutItem.Template>
                     </MenuFlyoutItem>
@@ -41,26 +51,34 @@
                     <MenuFlyoutItem>
                         <MenuFlyoutItem.Template>
                             <ControlTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="10,0">
-                                    <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                        <TextBlock Text="Open folder" FontSize="16" FontWeight="SemiBold" />
-                                        <TextBlock Text="Choose a folder, and play all the media in that folder" FontSize="12" Foreground="Gray" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <Button BorderThickness="0" Click="AddFolderButton_Click">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                                            <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                <TextBlock Text="Open folder" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="Choose a folder, and play all the media in that folder" FontSize="12" Foreground="Gray" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                             </ControlTemplate>
                         </MenuFlyoutItem.Template>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem>
                         <MenuFlyoutItem.Template>
                             <ControlTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="10,0">
-                                    <SymbolIcon Symbol="World" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                        <TextBlock Text="Open URL" FontSize="16" FontWeight="SemiBold" />
-                                        <TextBlock Text="Enter a URL, and stream media from that address" FontSize="12" Foreground="Gray" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <Button BorderThickness="0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Margin="10,0">
+                                            <SymbolIcon Symbol="World" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                <TextBlock Text="Open URL" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="Enter a URL, and stream media from that address" FontSize="12" Foreground="Gray" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                             </ControlTemplate>
                         </MenuFlyoutItem.Template>
                     </MenuFlyoutItem>
@@ -68,7 +86,7 @@
             </DropDownButton.Flyout>
         </DropDownButton>
 
-        <StackPanel x:Name="RecentMediaText" Margin="0,100,0,0" Visibility="Visible">
+        <StackPanel x:Name="RecentMediaText" Margin="0,100,0,0">
             <TextBlock Text="Recent media" FontSize="20" HorizontalAlignment="Left" Margin="30,0,0,0"/>
         </StackPanel>
         
@@ -141,13 +159,17 @@
                                 <MenuFlyoutItem>
                                     <MenuFlyoutItem.Template>
                                         <ControlTemplate>
-                                            <StackPanel Orientation="Horizontal" Margin="10,0" >
-                                                <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                                <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                                    <TextBlock Text="Open file" FontSize="16" FontWeight="SemiBold" />
-                                                    <TextBlock Text="Browse for files to play" FontSize="12" Foreground="Gray" />
-                                                </StackPanel>
-                                            </StackPanel>
+                                            <Button BorderThickness="0" Click="OpenFileButton_Click">
+                                                <Button.Content>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,0" >
+                                                        <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                                        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                            <TextBlock Text="Open file" FontSize="16" FontWeight="SemiBold" />
+                                                            <TextBlock Text="Browse for files to play" FontSize="12" Foreground="Gray" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Button.Content>
+                                            </Button>
                                         </ControlTemplate>
                                     </MenuFlyoutItem.Template>
                                 </MenuFlyoutItem>
@@ -155,26 +177,34 @@
                                 <MenuFlyoutItem>
                                     <MenuFlyoutItem.Template>
                                         <ControlTemplate>
-                                            <StackPanel Orientation="Horizontal" Margin="10,0">
-                                                <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                                <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                                    <TextBlock Text="Open folder" FontSize="16" FontWeight="SemiBold" />
-                                                    <TextBlock Text="Choose a folder, and play all the media in that folder" FontSize="12" Foreground="Gray" />
-                                                </StackPanel>
-                                            </StackPanel>
+                                            <Button BorderThickness="0" Click="AddFolderButton_Click">
+                                                <Button.Content>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,0">
+                                                        <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                                        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                            <TextBlock Text="Open folder" FontSize="16" FontWeight="SemiBold" />
+                                                            <TextBlock Text="Choose a folder, and play all the media in that folder" FontSize="12" Foreground="Gray" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Button.Content>
+                                            </Button>
                                         </ControlTemplate>
                                     </MenuFlyoutItem.Template>
                                 </MenuFlyoutItem>
                                 <MenuFlyoutItem>
                                     <MenuFlyoutItem.Template>
                                         <ControlTemplate>
-                                            <StackPanel Orientation="Horizontal" Margin="10,0">
-                                                <SymbolIcon Symbol="World" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                                <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                                    <TextBlock Text="Open URL" FontSize="16" FontWeight="SemiBold" />
-                                                    <TextBlock Text="Enter a URL, and stream media from that address" FontSize="12" Foreground="Gray" />
-                                                </StackPanel>
-                                            </StackPanel>
+                                            <Button BorderThickness="0">
+                                                <Button.Content>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,0">
+                                                        <SymbolIcon Symbol="World" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                                        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                            <TextBlock Text="Open URL" FontSize="16" FontWeight="SemiBold" />
+                                                            <TextBlock Text="Enter a URL, and stream media from that address" FontSize="12" Foreground="Gray" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Button.Content>
+                                            </Button>
                                         </ControlTemplate>
                                     </MenuFlyoutItem.Template>
                                 </MenuFlyoutItem>
@@ -196,13 +226,11 @@
                 <DataTemplate>
                     <StackPanel Margin="20,10" PointerEntered="Home_elements_PointerEntered" PointerExited="Home_elements_PointerExited">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
-                   
                             <Rectangle Width="170" Height="170" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="5" RadiusY="5">
                                 <Rectangle.RenderTransform>
                                     <RotateTransform Angle="0" />
                                 </Rectangle.RenderTransform>
                             </Rectangle>
-
                             <CheckBox 
                                 x:Name="CheckBox_Home"
                                 IsChecked="{Binding IsChecked, Mode=TwoWay}"
@@ -210,7 +238,6 @@
                                 Unchecked="CheckBox_Home_Unchecked"
                                 Visibility="Collapsed"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,15,0,0"/>
-
                             <Button 
                                 x:Name="Button_Left" 
                                 Width="45" Height="45" 
@@ -218,12 +245,12 @@
                                 VerticalAlignment="Bottom" 
                                 Margin="10,0,0,10" 
                                 Visibility="Collapsed"    
-                                Style="{StaticResource RoundButtonStyle}" >
+                                Style="{StaticResource RoundButtonStyle}" 
+                                Click="OnClickPlayMediaFiles">
                                 <Button.Content>
-                                        <FontIcon Glyph="&#xE102;" FontSize="15"/>
-                                    </Button.Content>
-                                </Button>
-
+                                    <FontIcon Glyph="&#xE102;" FontSize="15"/>
+                                </Button.Content>
+                            </Button>
                             <Button 
                                 x:Name="Button_Right" 
                                 Width="45" Height="45"
@@ -235,12 +262,45 @@
                                 <Button.Content>
                                     <FontIcon Glyph="&#xE10C;" FontSize="15"/>
                                 </Button.Content>
+                                <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Click="OnClickPlayMediaFiles" Text="Play">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE768;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Text="Play next">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE893;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Text="Add to">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE710;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Click="OnClickRemoveMediaFile" Text="Remove">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE711;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Text="Properties">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE946;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Text="Select">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xEA98;" FontSize="20"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </Button.Flyout>
                             </Button>
-                            <FontIcon Glyph="&#xE8D6;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
+                            <FontIcon Glyph="{Binding FontIcon}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
                         </Grid>
 
-                        <!-- Thêm TextBlock hiển thị tên -->
-                        <TextBlock Text="{Binding Title}"
+                        <TextBlock Text="{Binding FileName}"
                            TextWrapping="Wrap"
                            MaxWidth="170"
                            Margin="0,10,0,5"

@@ -19,7 +19,33 @@
         </Style>
     </Page.Resources>
     <Grid Background="White">
-        <Grid x:Name="Playlist_Main" Visibility="Visible">
+        <Grid x:Name="Playlist_Empty" Visibility="Visible">
+            <TextBlock Text="Playlists" FontSize="40" FontWeight="Bold" HorizontalTextAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image Source="C:\Users\Lapto\source\repos\mediaplayer\mediaplayer\Assets\Playlist_.png" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,20,0"/>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="You don't have any playlists" FontSize="30" HorizontalTextAlignment="Left" VerticalAlignment="Bottom" Margin="0,20"/>
+                    <Button x:Name="AddNewPlaylist_btn" CornerRadius="5" Background="#d03f0a" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Visibility="Visible" Padding="10,5">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                            <FontIcon  Foreground="White" Glyph="&#xE710;" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Create a new playlist" Foreground="White" FontSize="20"/>
+                        </StackPanel>
+                        <Button.Flyout>
+                            <Flyout Placement="Bottom">
+                                <StackPanel Padding="10" Orientation="Vertical" Background="#F3F3F3" BorderThickness="1" BorderBrush="Gray" CornerRadius="10">
+                                    <TextBox x:Name="InputTextBox" Width="300" Height="30" TextAlignment="Center" PlaceholderText="Enter playlist name" />
+                                    <Button Click="AddNewPlaylist" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
+                                        <TextBlock Text="Create playlist" Foreground="White" />
+                                    </Button>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        
+        <Grid x:Name="Playlist_Main" Visibility="Collapsed">
             <TextBlock Text="Playlists" FontWeight="Bold" FontSize="40" Margin="20,20,0,0"></TextBlock>
             <DropDownButton Content="Sort by: A - Z" FontSize="16" VerticalAlignment="Top" Margin="0,100,30,0" HorizontalAlignment="Right">
                 <DropDownButton.Flyout>
@@ -32,9 +58,19 @@
 
             <Button x:Name="AddPlaylist_btn" CornerRadius="5" Background="#d03f0a" BorderThickness="0" VerticalAlignment="Top" Margin="30,100,0,0" Visibility="Visible">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <FontIcon  Foreground="White" Glyph="&#xe947;" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="New playlist" Foreground="White" FontWeight="Bold"/>
+                    <FontIcon  Foreground="White" Glyph="&#xE710;" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="New playlist" Foreground="White"/>
                 </StackPanel>
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel Padding="10" Orientation="Vertical" Background="#F3F3F3" BorderThickness="1" BorderBrush="Gray" CornerRadius="10">
+                            <TextBox x:Name="InputTextBox1" Width="300" Height="30" TextAlignment="Center" PlaceholderText="Enter playlist name" />
+                            <Button Click="AddNewPlaylist" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
+                                <TextBlock Text="Create playlist" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
             </Button>
 
             <Border x:Name="CheckBoxBar_Playlist" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" Margin="30,90,0,0" Height="45" Background="White" Visibility="Collapsed">
@@ -93,12 +129,10 @@
                         <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="6"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
-
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel DoubleTapped="Show_Playlist_Element" PointerEntered="Playlist_elements_PointerEntered" PointerExited="Playlist_elements_PointerExited">
+                        <StackPanel PointerEntered="Playlist_elements_PointerEntered" PointerExited="Playlist_elements_PointerExited">
                             <Grid Margin="20,10" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <!-- Hình vuông bọc Ellipse -->
                                 <Rectangle Width="170" Height="170" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10">
                                     <Rectangle.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -111,7 +145,7 @@
                                       Visibility="Collapsed"
                                       HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
 
-                                <Button x:Name="Playlist_Play_btn" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
+                                <Button x:Name="Playlist_Play_btn" Click="OnClickPlayPlaylist" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
                                     <Button.Content>
                                         <FontIcon Glyph="&#xE102;" FontSize="15"/>
                                     </Button.Content>
@@ -121,26 +155,220 @@
                                     <Button.Content>
                                         <FontIcon Glyph="&#xE10C;" FontSize="15"/>
                                     </Button.Content>
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Click="OnClickPlayPlaylist" Text="Play">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE768;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Play next">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE893;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Add to">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE710;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Rename" Click="OnClickRenamePlaylist">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xe8ac;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Delete" Click="OnClickDeletePlaylist">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE74D;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Select">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xEA98;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                        </MenuFlyout>
+                                    </Button.Flyout>
                                 </Button>
-                                <FontIcon Glyph="&#xe93c;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
+                                <Button Click="ShowPlaylistElement" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button.Content>
+                                        <FontIcon Glyph="&#xe93c;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" />
+                                    </Button.Content>
+                                </Button>
                             </Grid>
                             <StackPanel VerticalAlignment="Bottom" Margin="20,0,0,5">
-                                <TextBlock Text="{Binding Title_Playlist_name}" 
-                                    TextWrapping="Wrap"
-                                    VerticalAlignment="Bottom" 
-                                    TextAlignment="Left" 
-                                    FontSize="16" 
-                                    Foreground="Black" />
-                                <TextBlock Text="{Binding Title_Playlist_quantity}" 
+                                <TextBlock
+                                       Text="{Binding PlaylistName}" 
+                                       VerticalAlignment="Bottom" 
+                                       TextAlignment="Left" 
+                                       FontSize="16" 
+                                       Foreground="Black"
+                                        Padding="10,0,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="10">
+                                    <TextBlock Text="{Binding TotalItems}" 
                                          TextWrapping="Wrap" 
                                          TextAlignment="Left" 
-                                         FontSize="12" 
+                                         FontSize="14" 
                                          Foreground="Black"/>
+                                    <TextBlock Text=" songs" 
+                                       VerticalAlignment="Bottom" 
+                                       TextAlignment="Left" 
+                                       FontSize="14" 
+                                       Foreground="Black" />
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
+        </Grid>
+        <StackPanel Background="White" x:Name="RenamePlaylistUI" Padding="10" Orientation="Vertical" BorderThickness="1" BorderBrush="Gray" CornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                <TextBlock Text="Rename Playlist" FontSize="20" HorizontalTextAlignment="Left" Margin="5,0,0,0"/>
+                <Button Click="HideRenamePlaylistUI" BorderBrush="Transparent" BorderThickness="0" HorizontalAlignment="Right" Margin="120,0,5,0">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE711;" FontSize="20"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <Image Source="C:\Users\Lapto\source\repos\mediaplayer\mediaplayer\Assets\ImgPlaylist.png" Width="250" VerticalAlignment="Center" />
+            <TextBlock x:Name="PreviousPlaylistName" FontSize="1" Foreground="White"/>
+            <TextBox x:Name="NewPlaylistText" Width="300" Height="30" TextAlignment="Center" PlaceholderText="Enter new playlist name" />
+            <Button Click="OnClickSubmitRename" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
+                <TextBlock Text="Rename" Foreground="White" />
+            </Button>
+        </StackPanel>
+        <Grid x:Name="PlaylistElement" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,30,0,0">
+                <Grid Margin="0,0,30,0">
+                    <Rectangle Width="200" Height="200" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10">
+                        <Rectangle.RenderTransform>
+                            <RotateTransform Angle="0" />
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <FontIcon Glyph="&#xe93c;" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+                <StackPanel>
+                    <TextBlock x:Name="PlaylistNameText" Text="Unknown" FontWeight="Bold" FontSize="35" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="TotalItemsText" Text="1" FontSize="25" VerticalAlignment="Top" Margin="0,10"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,10" >
+                        <Button Click="OnClickPlayAll" Background="#d03f0a" BorderThickness="1" BorderBrush="#d03f0a" CornerRadius="5" Padding="10,5" >
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE768;" FontSize="16" Foreground="White" Margin="0,0,10,0"/>
+                                <TextBlock Text="Play all" FontSize="16" Foreground="White"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Click="AddFileToPlayList" Background="white" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" Padding="10,5" Margin="10,0" >
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE710;" FontSize="16" Margin="0,0,10,0"/>
+                                <TextBlock Text="Add" FontSize="16"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Background="white" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" Padding="10,5" Margin="10,0" >
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE8AC;" FontSize="16" Margin="0,0,10,0"/>
+                                <TextBlock Text="Rename" FontSize="16"/>
+                            </StackPanel>
+                            <Button.Flyout>
+                                <Flyout Placement="Bottom">
+                                    <Flyout.Content>
+                                        <StackPanel Background="White" Padding="10" Orientation="Vertical" BorderThickness="1" BorderBrush="Gray" CornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="Rename Playlist" FontSize="20" HorizontalTextAlignment="Center" Margin="5,0,0,0"/>
+                                            <TextBox x:Name="NewPlaylistText1" Width="200" Height="30" TextAlignment="Center" PlaceholderText="Enter new playlist name" />
+                                            <Button Click="OnClickSubmitRename1" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,0">
+                                                <TextBlock Text="Rename" Foreground="White" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Flyout.Content>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                        <Button Background="white" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" Padding="10,5" Margin="10,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE74D;" FontSize="16" Margin="0,0,10,0"/>
+                                <TextBlock Text="Delete" FontSize="16"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <ListBox x:Name="MyListBox_Playlist" Margin="30,300,10,30">
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <StackPanel BorderThickness="1" BorderBrush="#ced3d3" Padding="0,0,50,0"  Height="50" Orientation="Horizontal" PointerEntered="StackPanel_Playlist_Element_PointerEntered" PointerExited="StackPanel_Playlist_Element_PointerExited" CornerRadius="5" >
+                            <FontIcon x:Name="Icon1" Glyph="&#xE92E;" FontSize="18" Visibility="Visible" Margin="10,0" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="CheckBox1" IsChecked="{Binding IsChecked, Mode=TwoWay}" Checked="CheckBox_Playlist_Element_Checked" Unchecked="CheckBox_Playlist_Element_Unchecked" Visibility="Collapsed" Margin="10,0" VerticalAlignment="Center" MaxWidth="30" >
+                                <CheckBox.Content>
+                                    <Button Click="OnClickPlaySongPlaylist" x:Name="PlayButton" Background="#e9e9e9" Visibility="Visible" Margin="0" VerticalAlignment="Center" BorderThickness="0">
+                                        <Button.Content>
+                                            <FontIcon Glyph="&#xE102;" FontSize="18" VerticalAlignment="Center"/>
+                                        </Button.Content>
+                                    </Button>
+                                </CheckBox.Content>
+                            </CheckBox>
+                            <FontIcon x:Name="Icon2" Glyph="&#xE189;" FontSize="18" Visibility="Visible" Margin="10,0,70,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding FileName}" Width="300" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Artist}" Width="200" VerticalAlignment="Center" Margin="150,0,50,0"/>
+                            <TextBlock Text="{Binding Album}" Width="200" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Duration}" VerticalAlignment="Center" Foreground="Red" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Border x:Name="CheckBoxBar_Playlist_Element" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" Margin="60,240,0,0" Height="45" Background="White" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+                        <CheckBox x:Name="CheckBoxAll_Playlist_Element" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="CheckedCount_Playlist_Element" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock Text=" songs selected *" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Button BorderBrush="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <Button.Content>
+                                <TextBlock Text="Clear" Foreground="Red" />
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <Button Background="#d03f0a" Padding="10,5" BorderThickness="0" CornerRadius="5" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE102;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE893;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Play next" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE109;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Add to" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xEFA9;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Show Artist" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xEB7E;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Edit info" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="10,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <FontIcon Glyph="&#xE946;" FontSize="15" Foreground="Black" Margin="0,0,5,0"/>
+                            <TextBlock Text="Properties" Foreground="Black" FontWeight="Normal"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </Page>

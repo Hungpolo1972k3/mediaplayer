@@ -26,10 +26,12 @@
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="We couldn't find any find any videos" FontSize="30" HorizontalTextAlignment="Left" VerticalAlignment="Center"/>
                     <TextBlock Text="Your music library doesn't contain any video content" VerticalAlignment="Center"  HorizontalTextAlignment="Left" Margin="0,10"/>
-                    <StackPanel Padding="10,5" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                        <FontIcon Glyph="&#xE8F4;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
-                        <TextBlock Text="Add folder" Foreground="White" />
-                    </StackPanel>
+                    <Button Click="AddFolderButton_Click_Video" Background="#d03f0a" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                        <StackPanel Padding="10,5" Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE8F4;" FontSize="15" Foreground="White" Margin="0,0,5,0"/>
+                            <TextBlock Text="Add folder" Foreground="White" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -51,7 +53,7 @@
                 </ListBox>
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,30,0">
-                <Button HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" BorderBrush="LightGray" Background="White" CornerRadius="5" >
+                <Button Click="AddFolderButton_Click_Video" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" BorderBrush="LightGray" Background="White" CornerRadius="5" >
                     <Button.Content>
                         <StackPanel Padding="10,5" Orientation="Horizontal">
                             <FontIcon Glyph="&#xE8F4;" Margin="0,0,10,0"/>
@@ -138,7 +140,6 @@
                     <DataTemplate>
                         <StackPanel  PointerEntered="AllVideos_elements_PointerEntered" PointerExited="AllVideos_elements_PointerExited">
                             <Grid Margin="20,10" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <!-- Hình vuông bọc Ellipse -->
                                 <Rectangle Width="250" Height="130" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10" >
                                     <Rectangle.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -151,7 +152,7 @@
                                       Visibility="Collapsed"
                                       HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
 
-                                <Button x:Name="AllVideos_Play_btn" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
+                                <Button x:Name="AllVideos_Play_btn" Click="OnClickPlayVideo" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
                                     <Button.Content>
                                         <FontIcon Glyph="&#xE102;" FontSize="15"/>
                                     </Button.Content>
@@ -160,19 +161,56 @@
                                     <Button.Content>
                                         <FontIcon Glyph="&#xE10C;" FontSize="15"/>
                                     </Button.Content>
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Click="OnClickPlayVideo" Text="Play">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE768;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Play next">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE893;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Add to">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE710;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Properties">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xE946;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Select">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xEA98;" FontSize="20"/>
+                                                </MenuFlyoutItem.Icon>
+                                            </MenuFlyoutItem>
+                                        </MenuFlyout>
+                                    </Button.Flyout>
                                 </Button>
-                                <FontIcon Glyph="&#xE8B2;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
+                                <Button Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button.Content>
+                                        <FontIcon Glyph="&#xE8B2;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" />
+                                    </Button.Content>
+                                </Button>
                             </Grid>
                             <StackPanel VerticalAlignment="Bottom" Margin="20,0,0,5">
-                                <TextBlock Text="{Binding Title_Video_name}" 
+                                <TextBlock Text="{Binding FileName}" 
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Bottom" 
-                                    TextAlignment="Left" 
+                                    TextAlignment="Center" 
                                     FontSize="16" 
-                                    Foreground="Black" />   
-                                <TextBlock Text="{Binding Video_Runtime}" 
+                                    Foreground="Black"
+                                    TextTrimming="CharacterEllipsis"
+                                    MaxWidth="250" 
+                                    MaxHeight="20"       
+                                    LineHeight="16"/>   
+                                <TextBlock Text="{Binding Duration}" 
                                      TextWrapping="Wrap" 
-                                     TextAlignment="Left" 
+                                     TextAlignment="Center" 
                                      FontSize="12" 
                                      Foreground="Black"/>
                             </StackPanel>
@@ -229,7 +267,7 @@
                     </Button>
                 </StackPanel>
             </Border>
-            <GridView Width="1100" x:Name="MyGridView_VideoFolders" Margin="40,180,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <GridView Width="1150" x:Name="MyGridView_VideoFolders" Margin="40,180,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="6"/>
@@ -239,37 +277,28 @@
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel HorizontalAlignment="Left" >
-                            <!-- Thư mục -->
-                            <StackPanel Orientation="Horizontal"  Margin="0,10,0,10" Width="1300">
+                            <StackPanel Orientation="Horizontal"  Margin="0,10,0,10" Width="1300" Padding="30,0,0,0">
                                 <FontIcon Glyph="&#xE8F4;" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" />
-                                <TextBlock Text="{Binding Title_VideoFolder_Name}" 
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center" 
-                                       TextAlignment="Center" 
-                                       FontSize="20" 
-                                       Margin="5,0"
-                                       Foreground="Black" />
-                                <TextBlock Text="{Binding Title_VideoFolder_Url}" 
+                                <TextBlock Text="{Binding FolderUrl}" 
                                        TextWrapping="Wrap"
                                        VerticalAlignment="Center" 
                                        TextAlignment="Right" 
                                        FontSize="16" 
-                                       Margin="5,0"    
+                                       Margin="20,0"    
                                        Foreground="Black" />
                             </StackPanel>
 
-                            <GridView x:Name="MyGridView_VideosInFolder" ItemsSource="{Binding Videos}" Margin="0, 10, 0, 0">
+                            <GridView Margin="0, 10, 0, 0" x:Name="MyGriView_VideoFolders_Files" ItemsSource="{Binding Videos}">
                                 <GridView.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2"/>
+                                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
                                     </ItemsPanelTemplate>
                                 </GridView.ItemsPanel>
 
-                                <GridView.ItemTemplate>
+                                <GridView.ItemTemplate >
                                     <DataTemplate>
                                         <StackPanel PointerEntered="VideoFolders_elements_PointerEntered" PointerExited="VideoFolders_elements_PointerExited">
-                                            <Grid Margin="20,5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <!-- Hình vuông bọc Ellipse -->
+                                            <Grid Margin="15,5" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <Rectangle Width="250" Height="130" Fill="#eeeeee" Stroke="#ced3d3" StrokeThickness="1" RadiusX="10" RadiusY="10" >
                                                     <Rectangle.RenderTransform>
                                                         <RotateTransform Angle="0" />
@@ -282,7 +311,7 @@
                                                       Visibility="Collapsed"
                                                       HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
 
-                                                <Button x:Name="VideoFolders_Play_btn" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
+                                                <Button x:Name="VideoFolders_Play_btn" Click="OnClickPlayVideo" Visibility="Collapsed" Width="45" Height="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Style="{StaticResource RoundButtonStyle}">
                                                     <Button.Content>
                                                         <FontIcon Glyph="&#xE102;" FontSize="15"/>
                                                     </Button.Content>
@@ -291,19 +320,52 @@
                                                     <Button.Content>
                                                         <FontIcon Glyph="&#xE10C;" FontSize="15"/>
                                                     </Button.Content>
+                                                    <Button.Flyout>
+                                                        <MenuFlyout>
+                                                            <MenuFlyoutItem Click="OnClickPlayVideo" Text="Play">
+                                                                <MenuFlyoutItem.Icon>
+                                                                    <FontIcon Glyph="&#xE768;" FontSize="20"/>
+                                                                </MenuFlyoutItem.Icon>
+                                                            </MenuFlyoutItem>
+                                                            <MenuFlyoutItem Text="Play next">
+                                                                <MenuFlyoutItem.Icon>
+                                                                    <FontIcon Glyph="&#xE893;" FontSize="20"/>
+                                                                </MenuFlyoutItem.Icon>
+                                                            </MenuFlyoutItem>
+                                                            <MenuFlyoutItem Text="Add to">
+                                                                <MenuFlyoutItem.Icon>
+                                                                    <FontIcon Glyph="&#xE710;" FontSize="20"/>
+                                                                </MenuFlyoutItem.Icon>
+                                                            </MenuFlyoutItem>
+                                                            <MenuFlyoutItem Text="Properties">
+                                                                <MenuFlyoutItem.Icon>
+                                                                    <FontIcon Glyph="&#xE946;" FontSize="20"/>
+                                                                </MenuFlyoutItem.Icon>
+                                                            </MenuFlyoutItem>
+                                                            <MenuFlyoutItem Text="Select">
+                                                                <MenuFlyoutItem.Icon>
+                                                                    <FontIcon Glyph="&#xEA98;" FontSize="20"/>
+                                                                </MenuFlyoutItem.Icon>
+                                                            </MenuFlyoutItem>
+                                                        </MenuFlyout>
+                                                    </Button.Flyout>
                                                 </Button>
                                                 <FontIcon Glyph="&#xE8B2;" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="70" Margin="0,0,0,30" />
                                             </Grid>
                                             <StackPanel VerticalAlignment="Bottom" Margin="20,0,0,5">
-                                                <TextBlock Text="{Binding Title_Video_name}" 
+                                                <TextBlock Text="{Binding FileName}" 
                                                         TextWrapping="Wrap"
                                                         VerticalAlignment="Bottom" 
-                                                        TextAlignment="Left" 
+                                                        TextAlignment="Center" 
                                                         FontSize="16" 
-                                                        Foreground="Black" />
-                                                <TextBlock Text="{Binding Video_Runtime}" 
+                                                        Foreground="Black" 
+                                                        TextTrimming="CharacterEllipsis"
+                                                        MaxWidth="250" 
+                                                        MaxHeight="20"       
+                                                        LineHeight="16"/>
+                                                <TextBlock Text="{Binding Duration}" 
                                                          TextWrapping="Wrap" 
-                                                         TextAlignment="Left" 
+                                                         TextAlignment="Center" 
                                                          FontSize="12" 
                                                          Foreground="Black"/>
                                             </StackPanel>

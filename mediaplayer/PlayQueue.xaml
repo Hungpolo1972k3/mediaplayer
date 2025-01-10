@@ -15,7 +15,7 @@
             <DropDownButton.Content>
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="OpenFile"  Width="20" Height="20" VerticalAlignment="Center" Margin="5,0" />
-                    <TextBlock Text="Add file(s)" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Text="Add file(s)" FontSize="16" VerticalAlignment="Center" Margin="5,0"/>
                 </StackPanel>
             </DropDownButton.Content>
         <DropDownButton.Flyout>
@@ -23,39 +23,51 @@
                     <MenuFlyoutItem>
                         <MenuFlyoutItem.Template>
                             <ControlTemplate>
-                                <StackPanel Orientation="Horizontal" Padding="10,0">
-                                    <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                    <StackPanel Orientation="Vertical" Margin="10,0,0,0" >
-                                        <TextBlock Text="Add file(s) to play queue" FontSize="16" FontWeight="SemiBold" />
-                                        <TextBlock Text="Browse for files to add to play queue" FontSize="12" Foreground="Gray" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <Button BorderThickness="0" Click="OpenFilesButton_Click">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Padding="10,0">
+                                            <SymbolIcon Symbol="OpenFile" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0" >
+                                                <TextBlock Text="Add file(s) to play queue" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="Browse for files to add to play queue" FontSize="12" Foreground="Gray" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                             </ControlTemplate>
                         </MenuFlyoutItem.Template>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem>
                         <MenuFlyoutItem.Template>
                             <ControlTemplate>
-                                <StackPanel Orientation="Horizontal" Padding="10,0">
-                                    <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                        <TextBlock Text="Add folder to play queue" FontSize="16" FontWeight="SemiBold" />
-                                        <TextBlock Text="Choose a folder, and add all the media in that folder to the play queue" FontSize="12" Foreground="Gray" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <Button BorderThickness="0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" Padding="10,0">
+                                            <SymbolIcon Symbol="Folder" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                <TextBlock Text="Add folder to play queue" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text="Choose a folder, and add all the media in that folder to the play queue" FontSize="12" Foreground="Gray" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                             </ControlTemplate>
                         </MenuFlyoutItem.Template>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem>
                             <MenuFlyoutItem.Template>
                                 <ControlTemplate>
-                                    <StackPanel Orientation="Horizontal" Padding="10,0">
-                                        <FontIcon Glyph="&#xE128;" FontSize="24" VerticalAlignment="Center" Margin="0,0,5,0" />
-                                        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                            <TextBlock Text="Add media from URL to play queue" FontSize="16" FontWeight="SemiBold" />
-                                            <TextBlock Text="Enter a URL, and add the media from that address to the play queue" FontSize="12" Foreground="Gray" />
-                                        </StackPanel>
-                                    </StackPanel>
+                                    <Button BorderThickness="0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal" Padding="10,0">
+                                                <FontIcon Glyph="&#xE128;" FontSize="24" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                                <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                                                    <TextBlock Text="Add media from URL to play queue" FontSize="16" FontWeight="SemiBold" />
+                                                    <TextBlock Text="Enter a URL, and add the media from that address to the play queue" FontSize="12" Foreground="Gray" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
                                 </ControlTemplate>
                             </MenuFlyoutItem.Template>
                         </MenuFlyoutItem>
@@ -64,7 +76,7 @@
         </DropDownButton>
 
         <StackPanel x:Name="PlayQueue_btn" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,95,0,0">
-            <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="0,0,20,0">
+            <Button x:Name="ClearPlayQueue_btn" Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="0,0,20,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE74D;" FontSize="24"/>
@@ -72,13 +84,25 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="0,0,20,0">
+            <Button x:Name="AddPlayQueue_btn" Padding="10,5" BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="Transparent" Margin="0,0,20,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE710;" FontSize="24"/>
                         <TextBlock Text="Add to" FontSize="16"/>
                     </StackPanel>
                 </Button.Content>
+
+                <Button.Flyout>
+                    <Flyout Placement="Bottom">
+                        <ListBox x:Name="PlaylistItems">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Tapped="AddPlayQueueToPlaylist" Text="{Binding PlaylistName}" Padding="10,0" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Flyout>
+                </Button.Flyout>
             </Button>
         </StackPanel>
 
@@ -134,34 +158,21 @@
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <StackPanel BorderThickness="1" BorderBrush="#ced3d3" Padding="0,0,50,0"  Height="50" Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered" PointerExited="StackPanel_PointerExited" CornerRadius="5" >
-                        <!-- Icon 1 -->
                         <FontIcon x:Name="Icon1" Glyph="&#xE92E;" FontSize="18" Visibility="Visible" Margin="10,0" VerticalAlignment="Center"/>
-
-                        <!-- CheckBox with PlayButton -->
                         <CheckBox x:Name="CheckBox_PlayQueue" IsChecked="{Binding IsChecked, Mode=TwoWay}" Visibility="Collapsed" Margin="10,0" VerticalAlignment="Center" MaxWidth="30" Checked="CheckBox_PlayQueue_Checked" Unchecked="CheckBox_PlayQueue_UnChecked">
                             <CheckBox.Content>
-                                <Button x:Name="PlayButton" Background="#e9e9e9" Visibility="Visible" Margin="0" VerticalAlignment="Center" BorderThickness="0">
+                                <Button Click="OnClickPlayMediaFiles" x:Name="PlayButton" Background="#e9e9e9" Visibility="Visible" Margin="0" VerticalAlignment="Center" BorderThickness="0">
                                     <Button.Content>
                                         <FontIcon Glyph="&#xE102;" FontSize="18" VerticalAlignment="Center"/>
                                     </Button.Content>
                                 </Button>
                             </CheckBox.Content>
                         </CheckBox>
-
-                        <!-- Icon 2 -->
                         <FontIcon x:Name="Icon2" Glyph="&#xE189;" FontSize="18" Visibility="Visible" Margin="10,0,70,0" VerticalAlignment="Center"/>
-
-                        <!-- PlayName Text -->
-                        <TextBlock Text="{Binding PlayName}" Width="300" VerticalAlignment="Center"/>
-
-                        <!-- PlayArtist Text -->
-                        <TextBlock Text="{Binding PlayArtist}" Width="200" VerticalAlignment="Center" Margin="150,0,50,0"/>
-
-                        <!-- PlayAlbum Text -->
-                        <TextBlock Text="{Binding PlayAlbum}" Width="200" VerticalAlignment="Center" />
-
-                        <!-- PlayTime Text -->
-                        <TextBlock Text="{Binding PlayTime}" VerticalAlignment="Center" Foreground="Red" />
+                        <TextBlock Text="{Binding FileName}" Width="300" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Artist}" Width="200" VerticalAlignment="Center" Margin="150,0,50,0"/>
+                        <TextBlock Text="{Binding Album}" Width="200" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Duration}" VerticalAlignment="Center" Foreground="Red" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

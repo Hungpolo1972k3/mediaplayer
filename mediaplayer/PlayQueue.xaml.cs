@@ -13,53 +13,221 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using static MediaPlayerWinUI.VideoLibrary;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Newtonsoft.Json;
+using Windows.Media.Core;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Google.Protobuf;
+using SharpCompress.Common;
 
 namespace MediaPlayerWinUI
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class PlayQueue : Page
     {
+        public static PlayQueue InstancePlayQueue { get; private set; }
         public PlayQueue()
         {
             this.InitializeComponent();
-            List<PlayItem> playItems = new List<PlayItem>
-        {
-            new PlayItem { PlayName = "Song 135435dfhfghfghgfhfgh dfghjofstnriotnsdg fsdpoitfgjspotehnroiswejrpsbgniodfsthyserknlesfisdlok", PlayArtist = "Artist 1", PlayAlbum = "Album 1", PlayTime = "3:45" },
-            new PlayItem { PlayName = "Song 2", PlayArtist = "Artist 2", PlayAlbum = "Album 2", PlayTime = "4:00" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" },
-            new PlayItem { PlayName = "Song 3", PlayArtist = "Artist 3", PlayAlbum = "Album 3", PlayTime = "5:30" }
-        };
-
-            // Gán nguồn dữ liệu cho ListBox
-            MyListBox.ItemsSource = playItems;
+            InstancePlayQueue = this;
+            LoadMediaFilesToGridView();
+            LoadPlaylistPlayQueue();
+            if (MyListBox.Items.Count == 0)
+            {
+                ClearPlayQueue_btn.IsEnabled = false;
+                AddPlayQueue_btn.IsEnabled = false;
+            }
+            else
+            {
+                ClearPlayQueue_btn.IsEnabled = true;
+                AddPlayQueue_btn.IsEnabled = true;
+            }
         }
-        public class PlayItem
+        public class GridViewItemPlayQueue
         {
-            public string PlayName { get; set; }
-            public string PlayArtist { get; set; }
-            public string PlayAlbum { get; set; }
-            public string PlayTime { get; set; }
-
+            public string FileId { get; set; }
+            public string FileName { get; set; }
+            public string FilePath { get; set; }
+            public string FileType { get; set; }
+            public string Duration { get; set; }
+            public string Title { get; set; }
+            public string Artist { get; set; }
+            public string Genre { get; set; }
+            public string Year { get; set; }
+            public string DateCreated { get; set; }
+            public string DateModified { get; set; }
             public bool IsChecked { get; set; }
         }
 
+        public class Playlist
+        {
+            public string PlaylistName { get; set; }
+            public List<GridViewItemPlayQueue> MediaItems { get; set; } = new List<GridViewItemPlayQueue>();
+            public bool IsChecked { get; set; }
+        }
+
+        private void AddPlayQueueToPlaylist(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var playlistName = (sender as TextBlock).Text;
+                var songsToAdd = MyListBox.Items.Cast<GridViewItemPlayQueue>().ToList();
+                string playlistsJsonFilePath = @"C:\MediaFiles\Playlists.json";
+                List<Playlist> playlists = new List<Playlist>();
+                if (File.Exists(playlistsJsonFilePath))
+                {
+                    string jsonContent = File.ReadAllText(playlistsJsonFilePath);
+                    playlists = JsonConvert.DeserializeObject<List<Playlist>>(jsonContent) ?? new List<Playlist>();
+                }
+                var selectedPlaylist = playlists.FirstOrDefault(p => p.PlaylistName == playlistName);
+                if (selectedPlaylist != null)
+                {
+                    selectedPlaylist.MediaItems.AddRange(songsToAdd);
+                    string updatedJsonContent = JsonConvert.SerializeObject(playlists, Formatting.Indented);
+                    File.WriteAllText(playlistsJsonFilePath, updatedJsonContent);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        public void LoadPlaylistPlayQueue()
+        {
+            try
+            {
+                string targetDirectory = @"C:\MediaFiles";
+                string jsonFilePath = Path.Combine(targetDirectory, "Playlists.json");
+                if (File.Exists(jsonFilePath))
+                {
+                    string jsonContent = File.ReadAllText(jsonFilePath);
+                    var playlists = JsonConvert.DeserializeObject<List<Playlist>>(jsonContent);
+                    PlaylistItems.ItemsSource = playlists;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading playlists: {ex.Message}");
+            }
+        }
+
+        private async void OpenFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow.Instance);
+                var picker = new FileOpenPicker();
+
+                WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+                picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+
+                picker.FileTypeFilter.Add(".mp4");
+                picker.FileTypeFilter.Add(".mp3");
+                picker.FileTypeFilter.Add(".avi");
+                picker.FileTypeFilter.Add(".mkv");
+                picker.FileTypeFilter.Add(".mov");
+                picker.FileTypeFilter.Add(".wmv");
+
+                StorageFile file = await picker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    string targetDirectory = @"C:\MediaFiles";
+                    var tagFile = TagLib.File.Create(file.Path);
+                    var fileInfo = new
+                    {
+                        FileId = Guid.NewGuid().ToString(),
+                        FileName = file.Name,
+                        FilePath = file.Path,
+                        FileType = file.FileType,
+                        Duration = tagFile.Properties.Duration.ToString(@"hh\:mm\:ss"),
+                        Title = tagFile.Tag.Title ?? "Unknown Title",
+                        Artist = tagFile.Tag.FirstPerformer ?? "Unknown Artist",
+                        Genre = tagFile.Tag.FirstGenre ?? "Unknown Genre",
+                        Year = tagFile.Tag.Year > 0 ? tagFile.Tag.Year.ToString() : "Unknown Year",
+                        DateCreated = File.GetCreationTime(file.Path).ToString("yyyy-MM-dd HH:mm:ss"),
+                        DateModified = File.GetLastWriteTime(file.Path).ToString("yyyy-MM-dd HH:mm:ss")
+                    };
+                    string jsonFilePath = Path.Combine(targetDirectory, "PlayQueue.json");
+                    List<object> fileList = new List<object>();
+                    if (File.Exists(jsonFilePath))
+                    {
+                        string existingJson = File.ReadAllText(jsonFilePath);
+                        fileList = JsonConvert.DeserializeObject<List<object>>(existingJson) ?? new List<object>();
+                    }
+                    fileList.Add(fileInfo);
+                    string json = JsonConvert.SerializeObject(fileList, Formatting.Indented);
+                    File.WriteAllText(jsonFilePath, json);
+
+                    var mediaPlayerElement = MainWindow.PlayerElement;
+                    mediaPlayerElement.Source = MediaSource.CreateFromUri(new Uri(file.Path));
+                    string extension = Path.GetExtension(file.Path).ToLower();
+                    if (extension == ".mp4" || extension == ".avi" || extension == ".mkv" || extension == ".mov" || extension == ".wmv")
+                    {
+                        mediaPlayerElement.Height = double.NaN;
+                    }
+                    LoadMediaFilesToGridView();
+                    if (MyListBox.Items.Count == 0)
+                    {
+                        ClearPlayQueue_btn.IsEnabled = false;
+                        AddPlayQueue_btn.IsEnabled = false;
+                    }
+                    else
+                    {
+                        ClearPlayQueue_btn.IsEnabled = true;
+                        AddPlayQueue_btn.IsEnabled = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error opening file: {ex.Message}");
+            }
+        }
+
+        private void LoadMediaFilesToGridView()
+        {
+            try
+            {
+                string targetDirectory = @"C:\MediaFiles";
+                string jsonFilePath = Path.Combine(targetDirectory, "PlayQueue.json");
+
+                if (File.Exists(jsonFilePath))
+                {
+                    string jsonContent = File.ReadAllText(jsonFilePath);
+
+                    var fileList = JsonConvert.DeserializeObject<List<GridViewItemPlayQueue>>(jsonContent);
+
+                    if (fileList != null)
+                    {
+                        MyListBox.ItemsSource = fileList;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading media files: {ex.Message}");
+            }
+        }
+
+        private void OnClickPlayMediaFiles(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (GridViewItemPlayQueue)((Button)sender).DataContext;
+
+            if (selectedItem != null)
+            {
+                string filePath = selectedItem.FilePath;
+
+                if (File.Exists(filePath))
+                {
+                    var mediaPlayerElement = MainWindow.PlayerElement;
+                    mediaPlayerElement.Source = MediaSource.CreateFromUri(new Uri(filePath));
+                    string extension = Path.GetExtension(filePath).ToLower();
+                    if (extension == ".mp4" || extension == ".avi" || extension == ".mkv" || extension == ".mov" || extension == ".wmv")
+                    {
+                        mediaPlayerElement.Height = double.NaN;
+                    }
+                }
+            }
+        }
 
         private void StackPanel_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
@@ -116,7 +284,7 @@ namespace MediaPlayerWinUI
         {
             int checkedCount_PlayQueue = 0;
 
-            var items = MyListBox.ItemsSource as IEnumerable<PlayItem>;
+            var items = MyListBox.ItemsSource as IEnumerable<GridViewItemPlayQueue>;
             if (items != null)
             {
                 foreach (var item in items)
